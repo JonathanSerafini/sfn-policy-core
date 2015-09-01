@@ -31,6 +31,7 @@ SparkleFormation.dynamic(:scaling_group) do |_name, _config = {}|
   nested_resources = {}
   nested_configs.each do |key, config|
     next if config == false
+    next if (config.is_a?(Hash) or config.is_a?(Array)) and config.empty?
     key = key.to_sym
 
     dynamic_name =  case key
