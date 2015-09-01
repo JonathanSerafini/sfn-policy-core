@@ -2,7 +2,7 @@
 SparkleFormation.dynamic(:iam_group) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  outputs.set("#{_name}_id") do
+  outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
@@ -27,7 +27,7 @@ end
 SparkleFormation.dynamic(:iam_instance_profile) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  outputs.set("#{_name}_id") do
+  outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
@@ -52,11 +52,11 @@ end
 SparkleFormation.dynamic(:iam_role) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  outputs.set("#{_name}_id") do
+  outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
-  outputs.set("#{_name}_arn") do
+  outputs.set!("#{_name}_arn") do
     value attr!(_name, :arn)
   end
 
@@ -96,7 +96,7 @@ end
 SparkleFormation.dynamic(:iam_policy) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  outputs.set("#{_name}_id") do
+  outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
