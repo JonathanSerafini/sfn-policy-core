@@ -6,7 +6,7 @@ SfnRegistry.register(:block_mapping) do |_config|
   _config[:virtual_name]  ||= nil
   _config[:ebs] = registry!(:block_ebs, _config[:ebs]) if _config[:ebs]
 
-  Hash[_config.map{|k,v| next if v.nil?; [process_key!(k),v]}]
+  Hash[_config.delete_if{|k,v|v.nil?}.map{|k,v| [process_key!(k),v]}]
 end
 
 SfnRegistry.register(:block_ebs) do |_config|
@@ -17,6 +17,6 @@ SfnRegistry.register(:block_ebs) do |_config|
   _config[:volume_size] ||= nil
   _config[:volume_type] ||= "gp2"
 
-  Hash[_config.map{|k,v| next if v.nil?; [process_key!(k),v]}]
+  Hash[_config.delete_if{|k,v|v.nil?}.map{|k,v| [process_key!(k),v]}]
 end
 
