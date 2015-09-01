@@ -26,12 +26,6 @@ SfnRegistry.register(:core_params) do
       type "String"
       description "Stack application name ex.: frontend, backend, api"
     end
-
-    app_tier do
-      type "String"
-      description "Stack application tier ex.: public, producted, private"
-      default state!(:default_tier)
-    end
   end
 end
 

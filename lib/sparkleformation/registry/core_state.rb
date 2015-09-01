@@ -22,8 +22,7 @@ SfnRegistry.register(:core_init) do
     product:      ref!(:env_product),   # ex.: cml, wsr, wso, osr, rtl
     revision:     ref!(:env_revision),  # ex.: 2015010101
     environment:  ref!(:env_name),      # ex.: prod, stag, dev
-    application:  ref!(:app_name),      # ex.: frontend, rabbitmq, sensu
-    tier:         ref!(:app_tier)       # ex.: public, dmz, protected, private
+    application:  ref!(:app_name)       # ex.: frontend, rabbitmq, sensu
 
   #
   # State attributes describing the tags that should always be present
