@@ -2,15 +2,23 @@
 SparkleFormation.dynamic(:redis_group) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  outputs.set("#{_name}_id") do
+  nested_configs = {}
+  nested_dynamics = %w(state)
+  nested_dynamics.each do |key|
+    nested_configs[key.to_sym] = _config.delete(key.to_sym) || {}
+  end
+
+  outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
-  outputs.set("#{_name}_host") do
+  outputs.set!("#{_name}_host") do
     value attr!(_name, "PrimaryEndPoint.Address")
   end
 
   resources.set!(_name) do
+    set_state!(nested_configs[:state])
+
     registry! :default_config, :config, 
       engine: ref!(:cache_engine),
       port:   "6379",
@@ -46,7 +54,7 @@ SparkleFormation.dynamic(:cache_subnet_group) do |_name, _config={}|
   resources.set!(_name) do
     set_state!(nested_configs[:state])
 
-    registry :default_config, :config, 
+    registry! :default_config, :config, 
       description: registry!(:context_name),
       subnet_ids: registry!(:context_subnets)
 
