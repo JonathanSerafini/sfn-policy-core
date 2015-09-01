@@ -6,7 +6,7 @@
 #
 
 SfnRegistry.register(:bootstrap) do
-  registry! :context_init
-  registry! :context_params
+  registry! :core_init
+  registry! :core_params
 end
 

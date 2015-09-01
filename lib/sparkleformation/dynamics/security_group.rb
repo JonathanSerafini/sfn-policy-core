@@ -38,7 +38,10 @@ SparkleFormation.dynamic(:security_group) do |_name, _config = {}|
     registry! :default_config, :config,
       vpc_id: ref!(:vpc_id),
       group_description: registry!(:context_name)
-    
+  
+    registry! :apply_config, :tags,
+      nested_configs[:tags]
+
     registry! :apply_config, :config,
       _config
   end
@@ -73,9 +76,9 @@ end
 #
 SparkleFormation.dynamic(:security_group_rules) do |_name, _type, _rules = []|
   resources.set!(_name) do
-    registry! :apply_config, _type, _rules
-
-    _rules = state!(_type).map do |rule|
+    registry! :apply_config, _type, _type => _rules
+      
+    _rules = state!(_type)[_type].map do |rule|
       rule[:ip_protocol] ||= "tcp"
       rule[:to_port] ||= rule[:from_port]
       rule[:source] ||= if state!(:tier) == :public
@@ -87,6 +90,7 @@ SparkleFormation.dynamic(:security_group_rules) do |_name, _type, _rules = []|
                    elsif _type == :ingress then :SourceSecurityGroupId
                    else :DestinationSecurityGroupId
                    end
+
 
       rule[source_key] = rule.delete(:source)
       Hash[rule.map { |k,v| [process_key!(k),v] }]

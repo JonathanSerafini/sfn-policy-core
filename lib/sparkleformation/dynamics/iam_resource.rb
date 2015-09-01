@@ -128,7 +128,7 @@ SparkleFormation.dynamic(:iam_managed_policy) do |_name, _config = {}|
   _config = {} if _config.nil?
 
   resources.set!(_name) do
-    dynamic! :default_config, :config, 
+    registry! :default_config, :config, 
       description: registry!(:context_name)
   end
 

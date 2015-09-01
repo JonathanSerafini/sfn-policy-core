@@ -1,6 +1,7 @@
 
 SparkleFormation.build do
-  registry! :boostrap
+  registry! :bootstrap
+  registry! :core_params
 
   available_zones = registry!(:available_zones)
   available_letters = available_zones.map { |az| az[-1] }
@@ -112,7 +113,7 @@ SparkleFormation.build do
         }
       } if tier == "public"
 
-      dynamic! :subnet, tier, az
+      dynamic! :subnet, tier, az,
         vpc_id: ref!(:vpc),
         cidr_suffix: "#{cidr_subnet_offset}.0/24",
         routes: subnet_routes
@@ -124,7 +125,7 @@ SparkleFormation.build do
   end
 
   outputs.vpc_availability_zones do
-    set!("Value", { "Fn::Join" => [",", _availability_zones ]})
+    set!("Value", { "Fn::Join" => [",", available_zones ]})
   end
 
   #
@@ -194,7 +195,7 @@ SparkleFormation.build do
   #
   # AutoScaling Lambda
   #
-  dynamic! :role, :vpc_scaling_record,
+  dynamic! :iam_role, :vpc_scaling_record,
     principal: { Service: "lambda.amazonaws.com" },
     managed_policy_arns: %w(
       arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess

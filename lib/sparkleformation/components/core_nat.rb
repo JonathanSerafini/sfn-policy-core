@@ -1,6 +1,8 @@
 
 SparkleFormation.build do
-  registry! :boostrap
+  registry! :bootstrap
+  registry! :core_params
+  registry! :core_vpc_params
   
   set_state! tier: :public
 

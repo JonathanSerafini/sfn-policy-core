@@ -1,12 +1,10 @@
 
 #
-# context_params
+# core_params
 #
 # Provides the basic parameters that ought to be present on all managed stacks
 #
-# @registry  :context_init
-# 
-SfnRegistry.register(:context_params) do
+SfnRegistry.register(:core_params) do
   parameters do
     env_product do
       type "String"

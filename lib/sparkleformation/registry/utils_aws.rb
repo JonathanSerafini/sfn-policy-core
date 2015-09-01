@@ -1,8 +1,9 @@
 
 require 'aws-sdk-core'
 
-SfnRegistry.register(:available_zones) do |_config|
-  state!(:available_zones) ||= begin
+SfnRegistry.register(:available_zones) do
+  result = state!(:available_zones)
+  result ||= begin
     client =  ::Aws::EC2::Client.new
     array =   client.
                 describe_availability_zones(filters: [{ 

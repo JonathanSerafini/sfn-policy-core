@@ -1,13 +1,14 @@
 
 #
-# network_params
+# core_vpc_params
 #
-# Provides the basic parameters for dealing with network resources within a vpc
+# Provides basic parameters inherited from the core_vpc template
 #
-# @registry  :context_init
-# 
-SfnRegistry.register(:network_params) do
+SfnRegistry.register(:core_vpc_params) do
   parameters do
+    #
+    # VPC / Networking parameters
+    #
     vpc_id do
       type "AWS::EC2::VPC::Id"
       description "VPC ID"
@@ -34,6 +35,24 @@ SfnRegistry.register(:network_params) do
         type "List<AWS::EC2::Subnet::Id>"
         description "VPC subnets for tier: #{_tier}"
       end
+    end
+
+    #
+    # IAM parameters
+    #
+    vpc_default_role_id do
+      type "String"
+      description "Default IAM Role"
+    end
+
+    vpc_default_profile_id do
+      type "String"
+      description "Default IAM Profile"
+    end
+
+    vpc_security_group_id do
+      type "String"
+      description "VPC member security group"
     end
   end
 end

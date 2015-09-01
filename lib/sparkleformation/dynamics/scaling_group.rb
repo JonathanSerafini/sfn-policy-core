@@ -93,12 +93,9 @@ SparkleFormation.dynamic(:scaling_basic_group) do |_name, _config = {}|
   #
   # Load required parameters
   #
-  registry! :context_params
   registry! :ami_params
   registry! :instance_params
   registry! :scaling_params
-  registry! :network_params
-  registry! :security_params
 
   #
   # Extract nested non-standard hashes

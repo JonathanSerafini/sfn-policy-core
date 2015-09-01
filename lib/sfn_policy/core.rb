@@ -1,6 +1,9 @@
 
 require "sfn_policy/core/version"
-#require "sparkle_formation/sparkles"
+require "sparkle_formation/sparkle"
 
-#SparkleFormation::SparklePack.register! :sfn_policy_core
+gem_root = Gem.loaded_specs['sfn_policy-core'].full_gem_path
+srkl_root = File.join(gem_root, 'lib', 'sparkleformation')
+
+SparkleFormation::SparklePack.register! :sfn_policy_core, srkl_root
 
