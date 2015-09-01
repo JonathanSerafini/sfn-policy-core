@@ -24,15 +24,5 @@ This gem provides a whole slew of Dynamics ( resource macros ) and Registries ( 
 
 ## Useage
 
-### Bootstrap
-
-*Directory Structure*
-```bash
-git clone git://path/to/sfn_policy-base provision
-bundle
-```
-
-### Template
-
-To create a new template, copy templates/core/_skeleton.rb and fill in.
+#TODO
 

@@ -7,9 +7,7 @@
 SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
   _config = {} if _config.nil?
 
-  registry! :context_params
-  registry! :network_params
-  registry! :security_params
+  registry! :core_params
 
   #
   # Extract nested non-standard hashes
