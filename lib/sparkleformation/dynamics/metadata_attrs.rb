@@ -58,7 +58,7 @@ SparkleFormation.dynamic(:metadata_mounts) do |_name, _config = {}|
 
       _camel_keys_set(:auto_disable)
       mounts do
-        state!(:properties).each do |key, value|
+        state!(:mounts).each do |key, value|
           value = case value
                   when String then { mount_point: value }
                   else value
