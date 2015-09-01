@@ -67,17 +67,19 @@ SparkleFormation.dynamic(:scaling_notifications) do |_name, _config = {}|
         autoscaling:EC2_INSTANCE_LAUNCH
         autoscaling:EC2_INSTANCE_TERMINATE
       ),
-      topic: ref!(:vpc_autoscaling_sns_id)
+      topic: ref!(:vpc_scaling_sns_id)
 
     registry! :apply_config, :notifications, 
       _config
- 
-    notification_configurations array!(
-      { 
-        NotificationTypes: state!(:notifications)[:types],
-        TopicARN: state!(:notifications)[:topic]
-      }
-    )
+
+    properties do
+      notification_configurations array!(
+        { 
+          NotificationTypes: state!(:notifications)[:types],
+          TopicARN: state!(:notifications)[:topic]
+        }
+      )
+    end
   end
 end
 
