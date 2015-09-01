@@ -73,9 +73,9 @@ SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
   #
   resources.set!(_name) do
     type "AWS::ElasticLoadBalancing::LoadBalancer"
-    registry! :load_balancer_ssl_policies
 
     properties do
+      policies registry!(:load_balancer_ssl_policies)
       state!(:config).each do |key, value|
         set!(key, value)
       end

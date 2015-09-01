@@ -4,7 +4,7 @@
 #
 
 SfnRegistry.register(:load_balancer_ssl_policies) do
-  policies array!(
+  array!(
     {
       PolicyName: "SSLPolicy",
       PolicyType: "SSLNegotiationPolicyType",
