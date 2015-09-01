@@ -19,7 +19,11 @@ SparkleFormation.dynamic(:launch_config) do |_name, _config = {}|
   )
 
   nested_dynamics.each do |key|
-    nested_configs[key.to_sym] = _config.delete(key.to_sym) || {}
+    default = case key.to_sym
+              when :block_devices then []
+              else {}
+              end
+    nested_configs[key.to_sym] = _config.delete(key.to_sym) || default
   end
 
   #
