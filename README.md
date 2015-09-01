@@ -24,5 +24,11 @@ This gem provides a whole slew of Dynamics ( resource macros ) and Registries ( 
 
 ## Useage
 
-#TODO
+This gem is not used on it's own and needs to be included. An example may be found in the `sfn_provision_base` repository which should be used as your project starting point. 
+
+## Registry
+TODO
+
+## Dynamics
+TODO
 
