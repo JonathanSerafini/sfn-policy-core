@@ -50,7 +50,8 @@ SfnRegistry.register(:core_init) do
   #
   registry! :default_state, 
     application_tiers: %w(public protected private management),
-    default_tier:      :protected
+    default_tier:      :protected,
+    tier:              :protected
 
 end
 
