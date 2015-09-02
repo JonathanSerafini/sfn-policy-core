@@ -73,7 +73,7 @@ SparkleFormation.dynamic(:iam_role) do |_name, _config = {}|
 
     properties do
       state!(:config).each do |key, value|
-        case key
+        case key.to_sym
         when :policies
           value = registry!(:iam_policies, value)
         when :principal
