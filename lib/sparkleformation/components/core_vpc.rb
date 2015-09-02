@@ -164,7 +164,7 @@ SparkleFormation.build do
   dynamic! :iam_managed_policy, :vpc_scaling_policy,
     description: "CFNChefIntegration",
     roles: array!(ref!(:vpc_default_role)),
-    policies: {
+    policy_document: {
       statement: [
         { effect: "Allow", resource: "*",
           action: %w(cloudformation:SignalResource) },

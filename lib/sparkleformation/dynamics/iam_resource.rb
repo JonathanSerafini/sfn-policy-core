@@ -127,16 +127,31 @@ end
 SparkleFormation.dynamic(:iam_managed_policy) do |_name, _config = {}|
   _config = {} if _config.nil?
 
+  outputs.set!("#{_name}_id") do
+    value ref!(_name)
+  end
+
   resources.set!(_name) do
     registry! :default_config, :config, 
-      description: registry!(:context_name)
-  end
+      description: registry!(:context_name),
+      policy_document: nil,
+      roles: nil,
+      users: nil,
+      groups: nil
 
-  dynamic! :iam_policy, _name, _config
+    registry! :apply_config, :config, _config
 
-  resources.set!(_name) do
     type "AWS::IAM::ManagedPolicy"
+
+    properties do
+      state!(:config).each do |key, value|
+        case key.to_sym
+        when :policy_document
+          value = registry!(:iam_policy_document, value)
+        end
+        set!(key, value)
+      end
+    end
   end
 end
-
 

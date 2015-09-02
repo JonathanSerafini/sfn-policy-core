@@ -29,7 +29,7 @@ SparkleFormation.build do
 
   dynamic! :iam_policy, :nat_monitor_policy,
     roles: array!(ref!(:role)),
-    policies: {
+    policy_document: {
       statement: [
         {
           effect: "Allow",
