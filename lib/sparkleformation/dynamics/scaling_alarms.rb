@@ -14,7 +14,7 @@ SparkleFormation.dynamic(:scaling_policy) do |_asg, _type, _config = {}|
       adjustment_type: "ChangeInCapacity",
       auto_scaling_group_name: ref!(_asg),
       cooldown: ref!(:scaling_cooldown),
-      scaling_adjustmnet: 1
+      scaling_adjustment: 1
 
     registry! :apply_config, :config,
       _config
@@ -53,7 +53,7 @@ SparkleFormation.dynamic(:scaling_alarm) do |_asg, _type, _metric, _config = {}|
       statistic: "Average",
       threshold: nil,
       period: 60,
-      evaludation_period: 3
+      evaluation_periods: 3
 
     registry! :apply_config, :config,
       _config

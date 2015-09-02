@@ -38,10 +38,8 @@ SparkleFormation.dynamic(:metadata_properties) do |_name, _config = {}|
       registry! :apply_config, :properties, _config
 
       _camel_keys_set(:auto_disable)
-      properties do
-        state!(:properties).each do |key, value|
-          set!("#{key}", value)
-        end
+      state!(:properties).each do |key, value|
+        set!("#{key}", value)
       end
       _camel_keys_set(:auto_enable)
 

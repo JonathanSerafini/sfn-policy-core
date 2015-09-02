@@ -25,7 +25,7 @@ SparkleFormation.build do
   # Instance Roles
   #
   dynamic! :iam_role, :role,
-    managed_policy_arns: array!(ref!(:vpc_scaling_policy))
+    managed_policy_arns: array!(ref!(:vpc_scaling_policy_id))
 
   dynamic! :iam_policy, :nat_monitor_policy,
     roles: array!(ref!(:role)),
@@ -52,7 +52,7 @@ SparkleFormation.build do
   # Security Group
   #
   dynamic! :security_group, :security_group,
-    state: { label: :app },
+    state: { label: "app", tier: "public" },
     ingress_rules: [
       { protocol: :tcp, from_port: 22, source: "0.0.0.0/0" },
       { protocol: "-1", source: ref!(:vpc_security_group_id),
@@ -63,12 +63,14 @@ SparkleFormation.build do
   # AutoScaling group per AZ
   #
   dynamic! :launch_config, :launch_config,
+    state: { tier: "public" },
     security_groups: array!(
       ref!(:vpc_ssh_security_group_id),
       ref!(:vpc_security_group_id),
       ref!(:security_group)
     ),
-    iam_instance_profile: ref!(:nat_profile)
+    iam_instance_profile: ref!(:nat_profile),
+    associate_public_ip_address: true
 
   available_letters.count.times do |i|
     az = available_letters[i]
@@ -76,6 +78,7 @@ SparkleFormation.build do
     az_subnet = select!(i, registry!(:context_subnets))
 
     dynamic! :scaling_group, "scaling_group_#{az}".to_sym,
+      state: { tier: "public" },
       metadata: {
         properties: {
           managed_zones: %w(protected private management)

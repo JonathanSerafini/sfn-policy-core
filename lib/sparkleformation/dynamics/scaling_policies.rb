@@ -46,7 +46,7 @@ SparkleFormation.dynamic(:scaling_update_policy) do |_name, _config = {}|
   resources.set!(_name) do
     registry! :default_config, :update_policy,
       min_instances_in_service: ref!(:scaling_nodes_min),
-      max_bach_size: ref!(:scaling_termination_max),
+      max_batch_size: ref!(:scaling_termination_max),
       pause_time: "PT1M",
       suspend_processes: nil,
       wait_on_resource_signals: false

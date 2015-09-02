@@ -25,7 +25,7 @@ SfnRegistry.register(:ami_params) do
 
     app_ami_keypair do
       type "AWS::EC2::KeyPair::KeyName"
-      decription "Instance SSH keypair"
+      description "Instance SSH keypair"
       default 'ghost'
     end
 

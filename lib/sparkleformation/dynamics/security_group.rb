@@ -79,7 +79,7 @@ SparkleFormation.dynamic(:security_group_rules) do |_name, _type, _rules = []|
     registry! :apply_config, _type, _type => _rules
       
     _rules = state!(_type)[_type].map do |rule|
-      rule[:ip_protocol] ||= "tcp"
+      rule[:ip_protocol] ||= rule.delete(:protocol) || "tcp"
       rule[:to_port] ||= rule[:from_port]
       rule[:source] ||= if state!(:tier) == :public
                         then "0.0.0.0/0"
