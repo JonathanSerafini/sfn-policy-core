@@ -34,9 +34,12 @@ SparkleFormation.dynamic(:subnet_route_table) do |_tier, _az, _config = {}|
 
   resources.set!(_name) do
     set_state!(_state.merge(nested_configs[:state]))
+
     registry! :default_config, :config, vpc_id: ref!(:vpc_id)
     registry! :apply_config, :config, _config
     registry! :apply_config, :tags, nested_configs[:tags]
+
+    type "AWS::EC2::RouteTable"
 
     properties do
       state!(:config).each do |key, value|
@@ -61,6 +64,8 @@ SparkleFormation.dynamic(:subnet_route) do |_name, _config = {}|
 
     registry! :apply_config, :config,
       _config
+
+    type "AWS::EC2::Route"
 
     properties do
       state!(:config).each do |k,v|
