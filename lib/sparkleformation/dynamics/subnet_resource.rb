@@ -33,7 +33,7 @@ SparkleFormation.dynamic(:subnet_route_table) do |_tier, _az, _config = {}|
   end
 
   resources.set!(_name) do
-    set_state(_state.merge(nested_configs[:state]))
+    set_state!(_state.merge(nested_configs[:state]))
     registry! :default_config, :config, vpc_id: ref!(:vpc_id)
     registry! :apply_config, :config, _config
     registry! :apply_config, :tags, nested_configs[:tags]
@@ -95,7 +95,7 @@ SparkleFormation.dynamic(:subnet) do |_tier, _az, _config = {}|
   end
 
   resources.set!(_name) do
-    set_state(_state.merge(nested_configs[:state]))
+    set_state!(_state.merge(nested_configs[:state]))
 
     registry! :default_config, :config,
       vpc_id: ref!(:vpc_id),
