@@ -12,7 +12,7 @@ SparkleFormation.dynamic(:subnet_route_table) do |_tier, _az, _config = {}|
 
   _state = {
     tier: _tier,
-    label: join!("-", _az, "-", _tier)
+    label: join!(_az, "-", _tier)
   }
 
   nested_configs = {}
@@ -79,10 +79,10 @@ SparkleFormation.dynamic(:subnet) do |_tier, _az, _config = {}|
   _config = {} if _config.nil?
   _state = {
     tier: _tier,
-    label: join!("-", _az, "-", _tier)
+    label: join!(_az, "-", _tier)
   }
 
-  _name         = "#{_tier}_#{_az}_table".to_sym
+  _name         = "#{_tier}_#{_az}_subnet".to_sym
   _param_name   = "vpc_cidr_#{_az}_#{_tier}".to_sym
   _subnet_name  = "#{_tier}_#{_az}_subnet".to_sym
   _table_name   = "#{_tier}_#{_az}_table".to_sym
