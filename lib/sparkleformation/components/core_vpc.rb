@@ -58,6 +58,17 @@ SparkleFormation.build do
   #
   # VPC Core
   #
+  resources.vpc do
+    type "AWS::EC2::VPC"
+    properties do
+      cidr_block            join!(ref!(:vpc_cidr_prefix), ".", "0.0/16")
+      enable_dns_support    ref!(:vpc_dns_support)
+      enable_dns_hostnames  ref!(:vpc_dns_hostnames)
+      instance_tenancy      ref!(:vpc_tenancy)
+      tags                  registry!(:context_tags)
+    end
+  end
+
   resources.dhcp_options do
     type "AWS::EC2::DHCPOptions"
     properties do
