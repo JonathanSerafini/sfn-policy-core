@@ -137,6 +137,14 @@ SparkleFormation.dynamic(:subnet) do |_tier, _az, _config = {}|
     end
   end
 
+  resources.set!(_assoc_name) do
+    type "AWS::EC2::SubnetRouteTableAssociation"
+    properties do
+      route_table_id ref!(_table_name)
+      subnet_id ref!(_subnet_name)
+    end
+  end
+
   registry! :default_config, :subnets, _tier => []
   state!(:subnets)[_tier] << ref!(_subnet_name)
 
