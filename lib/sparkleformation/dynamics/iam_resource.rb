@@ -114,7 +114,7 @@ SparkleFormation.dynamic(:iam_policy) do |_name, _config = {}|
 
     properties do
       state!(:config).each do |key, value|
-        case key
+        case key.to_sym
         when :policy_document
           value = registry!(:iam_policy_document, value)
         end
