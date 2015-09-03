@@ -69,6 +69,10 @@ SparkleFormation.build do
     end
   end
 
+  outputs.vpc_id do
+    value ref!(:vpc)
+  end
+
   resources.dhcp_options do
     type "AWS::EC2::DHCPOptions"
     properties do
@@ -191,16 +195,16 @@ SparkleFormation.build do
   #
   # AutoScaling notifications
   #
-  resources.autoscaling_topic do
+  resources.scaling_topic do
     type "AWS::SNS::Topic"
     properties do
-      display_name "autoscaling"
-      topic_name "autoscaling"
+      display_name "scaling"
+      topic_name "scaling"
     end
   end
 
-  outputs.vpc_autoscaling_sns_id do
-    value ref!(:autoscaling_topic)
+  outputs.vpc_scaling_sns_id do
+    value ref!(:scaling_topic)
   end
 
   #
