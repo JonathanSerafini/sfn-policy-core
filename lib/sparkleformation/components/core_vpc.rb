@@ -111,7 +111,7 @@ SparkleFormation.build do
 
   #
   # VPC Network
-  #
+  # - 1 /24 Subnet per Tier per AZ
   cidr_az_offset = 0
 
   available_letters.each do |az|
@@ -181,7 +181,8 @@ SparkleFormation.build do
 
   #
   # Security Groups
-  #
+  # - VpcSshSecurityGroup : Nodes allowed to SSH into VpcSecurityGroup nodes
+  # - VpcSecurityGroup : Nodes belonging to the VPC
   dynamic! :security_group, :vpc_ssh_security_group,
     state: { label: :ssh },
     vpc_id: ref!(:vpc)
@@ -194,7 +195,8 @@ SparkleFormation.build do
 
   #
   # AutoScaling notifications
-  #
+  # - AutoScalingGroups will be configured to push Create/Terminate
+  # - notifications to this SNS topic.
   resources.scaling_topic do
     type "AWS::SNS::Topic"
     properties do
@@ -209,7 +211,8 @@ SparkleFormation.build do
 
   #
   # AutoScaling Lambda
-  #
+  # - IAM role for a Lambda method that listens to the ScalingTopic
+  # - and which will optionally create DNS records based on tags
   dynamic! :iam_role, :vpc_scaling_record,
     principal: { Service: "lambda.amazonaws.com" },
     managed_policy_arns: %w(
