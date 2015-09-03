@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = SfnPolicy::Core::VERSION
   spec.authors       = ["Jonathan Serafini"]
   spec.email         = ["jonathan@lightspeedpos.com"]
-  spec.summary       = %q{: Write a short summary. Required.}
-  spec.description   = %q{: Write a longer description. Optional.}
+  spec.summary       = %q{SparkleFormation policy objects}
+  spec.description   = %q{Provides helper dynamics, registries and components to bootstrap your sparkleformation use. With these, you cut down on annoying duplication.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
