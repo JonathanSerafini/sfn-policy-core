@@ -7,7 +7,7 @@ SparkleFormation.build do
 
   parameters do
     cloudtrail_bucket_name do
-      type "Number"
+      type "String"
       description "Bucket to send cloudtrail messages to"
     end
 
@@ -19,9 +19,7 @@ SparkleFormation.build do
   end
 
   conditions do
-    use_sns_topic do
-      not! equals!(ref!(:cloudtrail_sns_topic), "none")
-    end
+    use_sns_topic not!(equals!(ref!(:cloudtrail_sns_topic), "none"))
   end
 
   resources do
