@@ -8,7 +8,7 @@ SparkleFormation.dynamic(:launch_config) do |_name, _config = {}|
   _config = {} if _config.nil?
 
   #
-  # Extract and process nested resources
+  # Extract nested resources
   #
   nested_configs = {}
   nested_dynamics = %w(
@@ -50,10 +50,17 @@ SparkleFormation.dynamic(:launch_config) do |_name, _config = {}|
     registry! :resource_properties, :config
   end
 
+  #
+  # Process nested resources
+  #
+
   dynamic! :metadata, _name, nested_configs[:metadata]
   dynamic! :launch_userdata, _name, nested_configs[:userdata]
   dynamic! :launch_devices, _name, nested_configs[:block_devices]
 
+  # 
+  # Return resource
+  #
   _resource
 end
 
@@ -74,13 +81,12 @@ SparkleFormation.dynamic(:launch_devices) do |_name, _config = []|
         block_device_mappings array!(*devices)
       end
     end
-
   end
 end
 
 SparkleFormation.dynamic(:launch_userdata) do |_name, _config = {}|
   resources.set!(_name) do
-    registry! :resource_config, :userdata, _config
+    registry! :resource_config, :userdata, _config,
       signal_resource: "ScalingGroup",
       config_sets: ["Chef"]
   end
