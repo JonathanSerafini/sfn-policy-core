@@ -1,57 +1,40 @@
 
 SparkleFormation.dynamic(:iam_group) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
   resources.set!(_name) do
-    registry! :default_config, :config, 
+    type "AWS::IAM::Group"
+    set_state!(_config.delete(:state) || {})
+
+    registry! :resource_config, :config, _config, 
       path: "/",
       policies: nil,
       managed_policy_arns: nil
 
-    registry! :apply_config, :config, _config
-
-    type "AWS::IAM::Group"
-
-    properties do
-      state!(:config).each do |key, value|
-        set!(key, value)
-      end
-    end
+    registry! :resource_properties, :config
   end
 end
 
 SparkleFormation.dynamic(:iam_instance_profile) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
   resources.set!(_name) do
-    registry! :default_config, :config, 
+    type "AWS::IAM::InstanceProfile"
+    set_state!(_config.delete(:state) || {})
+
+    registry! :resource_config, :config, _config,
       path: "/",
       roles: nil
 
-    registry! :apply_config, :config, _config
-
-    type "AWS::IAM::InstanceProfile"
-
-    properties do
-      state!(:config).each do |key, value|
-        set!(key, value)
-      end
-    end
+    registry! :resource_properties, :config
   end
 end
 
-
 SparkleFormation.dynamic(:iam_role) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
@@ -61,15 +44,14 @@ SparkleFormation.dynamic(:iam_role) do |_name, _config = {}|
   end
 
   resources.set!(_name) do
-    registry! :default_config, :config, 
+    type "AWS::IAM::Role"
+    set_state!(_config.delete(:state) || {})
+
+    registry! :resource_config, :config, _config,
       path: "/",
       policies: nil,
       managed_policy_arns: nil,
       principal: { Service: "ec2.amazonaws.com" }
-
-    registry! :apply_config, :config, _config
-
-    type "AWS::IAM::Role"
 
     properties do
       state!(:config).each do |key, value|
@@ -94,23 +76,20 @@ SparkleFormation.dynamic(:iam_role) do |_name, _config = {}|
 end
 
 SparkleFormation.dynamic(:iam_policy) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
   resources.set!(_name) do
-    registry! :default_config, :config, 
+    type "AWS::IAM::Policy"
+    set_state!(_config.delete(:state) || {})
+
+    registry! :resource_config, :config, _config,
       policy_name: _name,
       policy_document: nil,
       roles: nil,
       users: nil,
       groups: nil
-
-    registry! :apply_config, :config, _config
-
-    type "AWS::IAM::Policy"
 
     properties do
       state!(:config).each do |key, value|
@@ -125,23 +104,20 @@ SparkleFormation.dynamic(:iam_policy) do |_name, _config = {}|
 end
 
 SparkleFormation.dynamic(:iam_managed_policy) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   outputs.set!("#{_name}_id") do
     value ref!(_name)
   end
 
   resources.set!(_name) do
-    registry! :default_config, :config, 
+    type "AWS::IAM::ManagedPolicy"
+    set_state!(_config.delete(:state) || {})
+
+    registry! :resource_config, :config, _config,
       description: registry!(:context_name),
       policy_document: nil,
       roles: nil,
       users: nil,
       groups: nil
-
-    registry! :apply_config, :config, _config
-
-    type "AWS::IAM::ManagedPolicy"
 
     properties do
       state!(:config).each do |key, value|
