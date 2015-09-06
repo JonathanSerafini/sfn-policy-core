@@ -46,3 +46,17 @@ SfnRegistry.register(:apply_config) do |_name, _config|
   set_state!(_name => _current_state)
 end
 
+SfnRegistry.register(:resource_config) do |_name, _config={}, _default={}|
+  registry! :default_config, _name, _default || {}
+  registry! :apply_config, _name, _config || {}
+end
+
+SfnRegistry.register(:resource_properties) do |_name|
+  properties do
+    state!(_name).each do |key, value|
+      set!(key, value)
+    end
+    tags registry! :context_tags if taggable?
+  end
+end
+
