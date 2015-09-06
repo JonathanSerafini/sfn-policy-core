@@ -24,7 +24,7 @@ SparkleFormation.build do
   dynamic! :cache_subnet_group, :subnet_group_cache,
     state: { tier: :private }
 
-  dynamic! :redis_group, :cache,
+  dynamic! :redis_cluster, :cache,
     state: { tier: :private }
 
   dynamic! :record_set, :cache_host,
