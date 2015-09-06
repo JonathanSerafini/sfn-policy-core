@@ -9,7 +9,6 @@ SparkleFormation.dynamic(:metadata) do |_name, _config = {}|
   nested_dynamics = %w(
     properties
     mounts
-    state
   )
 
   nested_dynamics.each do |key|
@@ -19,15 +18,15 @@ SparkleFormation.dynamic(:metadata) do |_name, _config = {}|
   #
   # Create the resource configuration
   #
-  resources.set!(_name) do
-    set_state!(nested_configs[:state])
+  _resource = resources.set!(_name) do
+    set_state!(_config.delete(:state) || {})
     registry! :apply_config, :config, _config
   end
 
   dynamic! :metadata_properties, _name, nested_configs[:properties]
   dynamic! :metadata_mounts, _name, nested_configs[:mounts]
 
-  resources[_name]
+  _resource
 end
 
 SparkleFormation.dynamic(:metadata_properties) do |_name, _config = {}|
@@ -42,7 +41,6 @@ SparkleFormation.dynamic(:metadata_properties) do |_name, _config = {}|
         set!("#{key}", value)
       end
       _camel_keys_set(:auto_enable)
-
     end
   end
 end

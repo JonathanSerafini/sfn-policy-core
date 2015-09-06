@@ -5,12 +5,8 @@
 # Creates a EC2 Load Balancer
 #
 SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
-  registry! :core_params
-
   #
-  # Extract nested non-standard hashes
+  # Extract nested resources
   #
   nested_configs = {}
   nested_dynamics = %w(
@@ -18,8 +14,6 @@ SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
     draining_policy
     connection_settings
     health_check
-    state
-    tags
   )
 
   nested_dynamics.each do |key|
@@ -27,7 +21,7 @@ SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
   end
 
   #
-  # Create an output referencing the resource
+  # Resource
   #
   outputs.set!("#{_name}_id") do
     value ref!(_name)
@@ -37,31 +31,29 @@ SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
     value attr!(_name, "DNSName")
   end
 
-  #
-  # Create the resource configuration
-  #
-  resources.set!(_name) do
-    set_state!(nested_configs[:state])
+  _resource = resources.set!(_name) do
+    type "AWS::ElasticLoadBalancing::LoadBalancer"
+    set_state!(_config.delete(:state) || {})
 
-    registry! :default_config, :config,
+    registry! :resource_config, :config, _config,
       load_balancer_name: registry!(:context_name),
       scheme: if state!(:tier) == :public
                 then "internet-facing"
                 else "internal"
               end,
       cross_zone: true,
+      policies: registry!(:load_balancer_ssl_policies),
       security_groups: array!(
         ref!(:security_group_elb),
         ref!(:vpc_security_group_id)
       ),
       subnets: registry!(:context_subnets)
-
-    registry! :apply_config, :config,
-      _config
+  
+    registry! :resource_properties, :config
   end
 
   #
-  # Create the nested resources
+  # Process nested resources
   #
   dynamic! :load_balancer_health, _name, nested_configs[:health_check]
   dynamic! :load_balancer_settings, _name, nested_configs[:connection_settings]
@@ -69,34 +61,19 @@ SparkleFormation.dynamic(:load_balancer) do |_name, _config = {}|
   dynamic! :load_balancer_listeners, _name, nested_configs[:listeners]
 
   #
-  # Create the resources
+  # Return resource
   #
-  resources.set!(_name) do
-    type "AWS::ElasticLoadBalancing::LoadBalancer"
-
-    properties do
-      policies registry!(:load_balancer_ssl_policies)
-      state!(:config).each do |key, value|
-        set!(key, value)
-      end
-      tags registry!(:context_tags)
-    end
-  end
+  _resource
 end
 
 SparkleFormation.dynamic(:load_balancer_health) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   resources.set!(_name) do
-    registry! :default_config, :health,
+    registry! :resource_config, :health, _config,
       healthy_threshold: 6,
       unhealthy_threshold: 3,
       target: nil,
       interval: 10,
       timeout: 5
-
-    registry! :apply_config, :health, 
-      _config
 
     unless state!(:health).empty?
       properties do
@@ -111,14 +88,9 @@ SparkleFormation.dynamic(:load_balancer_health) do |_name, _config = {}|
 end
 
 SparkleFormation.dynamic(:load_balancer_settings) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   resources.set!(_name) do
-    registry! :default_config, :settings,
+    registry! :resource_config, :settings, _config,
       idle_timeout: 60
-
-    registry! :apply_config, :settings, 
-      _config
 
     unless state!(:settings).empty?
       properties do
@@ -133,15 +105,10 @@ SparkleFormation.dynamic(:load_balancer_settings) do |_name, _config = {}|
 end
 
 SparkleFormation.dynamic(:load_balancer_policy) do |_name, _config = {}|
-  _config = {} if _config.nil?
-
   resources.set!(_name) do
-    registry! :default_config, :policy,
+    registry! :resource_config, :policy, _config,
       enabled: true,
       timeout: 120
-
-    registry! :apply_config, :policy, 
-      _config
 
     unless state!(:policy).empty?
       properties do
@@ -156,8 +123,6 @@ SparkleFormation.dynamic(:load_balancer_policy) do |_name, _config = {}|
 end
 
 SparkleFormation.dynamic(:load_balancer_listeners) do |_name, _config = []|
-  _config = [] if _config.nil?
-
   resources.set!(_name) do
     registry! :default_config, :listeners,
       listeners: []
@@ -188,8 +153,4 @@ SparkleFormation.dynamic(:load_balancer_listeners) do |_name, _config = []|
     end
   end
 end
-
-
-
-
 
