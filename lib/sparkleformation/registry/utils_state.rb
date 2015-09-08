@@ -47,6 +47,9 @@ SfnRegistry.register(:apply_config) do |_name, _config|
 end
 
 SfnRegistry.register(:resource_config) do |_name, _config={}, _default={}|
+  tags = _config.delete(:tags) || {}
+  registry! :apply_config, :tags, tags unless tags.empty?
+  
   registry! :default_config, _name, _default || {}
   registry! :apply_config, _name, _config || {}
 end
