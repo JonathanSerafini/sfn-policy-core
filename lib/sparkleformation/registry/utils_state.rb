@@ -47,19 +47,23 @@ SfnRegistry.register(:apply_config) do |_name, _config|
 end
 
 SfnRegistry.register(:resource_config) do |_name, _config={}, _default={}|
+  _config = {} if _config.nil?
+  _default = {} if _default.nil?
+  
   tags = _config.delete(:tags) || {}
   registry! :apply_config, :tags, tags unless tags.empty?
   
-  registry! :default_config, _name, _default || {}
-  registry! :apply_config, _name, _config || {}
+  registry! :default_config, _name, _default
+  registry! :apply_config, _name, _config
 end
 
-SfnRegistry.register(:resource_properties) do |_name|
-  properties do
-    state!(_name).each do |key, value|
-      set!(key, value)
-    end
-    tags registry! :context_tags if taggable?
+SfnRegistry.register(:resource_properties) do |_name, _nesting = []|
+  _obj = properties
+  _obj.set!(:tags, registry!(:context_tags)) if _obj.taggable?
+
+  _nesting.each { |o| _obj = _obj.set!(o) }
+  _obj.state!(_name).each do |key, value|
+    _obj.set!(key, value)
   end
 end
 
