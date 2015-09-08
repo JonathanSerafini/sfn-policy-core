@@ -101,19 +101,6 @@ SparkleFormation.dynamic(:scaling_basic_group) do |_name, _config = {}|
   registry! :scaling_params
 
   #
-  # Extract nested non-standard hashes
-  #
-  nested_dynamics = %w(
-    state
-    tags
-  )
-
-  nested_configs = {}
-  nested_dynamics.each do |key|
-    nested_configs[key.to_sym] = _config.delete(key.to_sym) || {}
-  end
- 
-  #
   # Create an output referencing the autoscaling group
   #
   outputs.set!("#{_name}_id") do
@@ -124,13 +111,11 @@ SparkleFormation.dynamic(:scaling_basic_group) do |_name, _config = {}|
   # Create the autoscaling group resource
   #
   resources.set!(_name) do
-    #
-    # Define default configurations
-    #
+    type "AWS::AutoScaling::AutoScalingGroup"
     set_state!(auto_scaling: true)
-    set_state!(nested_configs[:state])
+    set_state!(_config.delete(:state) || {})
 
-    registry! :default_config, :config,
+    registry! :resource_config, :config, _config,
       launch_configuration_name:  ref!(:launch_config),
       health_check_grace_period:  ref!(:scaling_grace_period),
       health_check_type:          "ELB",
@@ -141,23 +126,7 @@ SparkleFormation.dynamic(:scaling_basic_group) do |_name, _config = {}|
       desired_capacity:           ref!(:scaling_nodes_desired),
       load_balancer_names:        array!(ref!(:load_balancer_id))
 
-    # 
-    # Override with supp;ied configurations
-    #
-    registry! :apply_config, :tags,   nested_configs[:tags]
-    registry! :apply_config, :config, _config
-
-    #
-    # Apply the configuration
-    #
-    type "AWS::AutoScaling::AutoScalingGroup"
-
-    properties do
-      state!(:config).each do |key, value|
-        set!(key, value)
-      end
-      tags registry!(:context_tags)
-    end
+    registry! :resource_properties, :config
   end
 end
 
