@@ -1,7 +1,6 @@
 
 SparkleFormation.build do
   registry! :bootstrap
-  registry! :instance_params
 
   parameters do
     cache_nodes do
@@ -14,6 +13,12 @@ SparkleFormation.build do
       type "String"
       description "Cache engine type"
       default "redis"
+    end
+
+    cache_instance do
+      type "String"
+      description "Cache instance type"
+      default "cache.m3.medium"
     end
   end
 
@@ -28,7 +33,7 @@ SparkleFormation.build do
     state: { tier: :private }
 
   dynamic! :record_set, :cache_host,
-    name: join!(state!(:application), '.', ref!(:vpc_domain_name), '.'),
+    name: join!("cache.", state!(:application), '.', ref!(:vpc_domain_name), '.'),
     type: "CNAME",
     TTL: 60,
     resource_records: [ attr!(:cache, "PrimaryEndPoint.Address") ]
