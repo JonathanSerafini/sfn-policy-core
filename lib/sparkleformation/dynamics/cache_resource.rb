@@ -16,7 +16,7 @@ SparkleFormation.dynamic(:redis_cluster) do |_name, _config = {}|
       engine: ref!(:cache_engine),
       port:   "6379",
       num_cache_clusters:       ref!(:cache_nodes),
-      cache_node_type:          ref!(:app_instance),
+      cache_node_type:          ref!(:cache_instance),
       cache_subnet_group_name:  ref!(:subnet_group_cache),
       security_group_ids:       array!(ref!(:security_group_cache)),
       automatic_failover_enabled:     "false",
@@ -45,7 +45,7 @@ SparkleFormation.dynamic(:memcache_cluster) do |_name, _config = {}|
       cluster_name: registry!(:context_name),
       AZ_mode:      "cross-az",
       num_cache_clusters:       ref!(:cache_nodes),
-      cache_node_type:          ref!(:app_instance),
+      cache_node_type:          ref!(:cache_instance),
       vpc_security_group_ids:   array!(ref!(:security_group_cache)),
       cache_subnet_group_name:  ref!(:subnet_group_cache),
       cache_parameter_group_name:     nil
