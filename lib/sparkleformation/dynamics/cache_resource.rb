@@ -12,7 +12,7 @@ SparkleFormation.dynamic(:redis_cluster) do |_name, _config = {}|
     type 'AWS::ElastiCache::ReplicationGroup'
     set_state!(_config.delete(:state) || {})
 
-    registry :resource_config, :config, _config,
+    registry! :resource_config, :config, _config,
       engine: ref!(:cache_engine),
       port:   "6379",
       num_cache_clusters:       ref!(:cache_nodes),
@@ -39,7 +39,7 @@ SparkleFormation.dynamic(:memcache_cluster) do |_name, _config = {}|
     type 'AWS::ElastiCache::CacheCluster'
     set_state!(_config.delete(:state) || {})
 
-    registry :resource_config, :config, _config,
+    registry! :resource_config, :config, _config,
       engine: ref!(:cache_engine),
       port:   "11211",
       cluster_name: registry!(:context_name),
@@ -59,7 +59,7 @@ SparkleFormation.dynamic(:cache_subnet_group) do |_name, _config = {}|
     type "AWS::ElastiCache::SubnetGroup"
     set_state!(_config.delete(:state) || {})
 
-    registry :resource_config, :config, _config,
+    registry! :resource_config, :config, _config,
       description: registry!(:context_name),
       subnet_ids: registry!(:context_subnets)
    
